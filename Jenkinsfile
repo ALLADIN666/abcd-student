@@ -22,8 +22,28 @@ pipeline {
                 sh 'docker run --name juice-shop -d --rm -p 3000:3000 bkimminich/juice-shop;sleep 5'
                 sh '''
                     docker run --name zap -v /root/abc/abc-student/.zap:/zap/wrk/:rw -t ghrc.io/zaproxy/zaproxy:stable \
-                    bash -c "zap.sh -cmd -addonupdate; zap.sh -cmd addoninstall communityScripts -addoninstall pscanrules; zap-full-scan.py -t http://localhost:3000
+                    bash -c "zap.sh -cmd -addonupdate; zap.sh -cmd addoninstall communityScripts -addoninstall pscanrulesAlpha -addoninstall pscanrulesBeta -autorun /zap/wrk/passive.yaml" || true
                 '''
-                '''
+            }
+            post {
+                always {
+                    // ${WORKSPACE} resolves to /var/jenkins_home/workspace/ABCD
+                    sh '''
+                        docker cp zap:/zap/wrk/reports/zap_html_report.html ${WORKSPACE}/results/zap_html_report.html
+                        docker cp zap:/zap/wrk/reports/zap_xml_report.xml ${WORKSPACE}/results/zap_xml_report.xml
+                        docker stop zap juice-shop
+                        docker rm zap
+                    '''
+                }
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Archiving results...'
+            archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
+            echo 'Skipping DefectDojo...'
+        }
     }
 }
+            
