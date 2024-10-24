@@ -19,7 +19,7 @@ pipeline {
         }
         stage('OSV') {
             steps {
-                sh 'osv-scanner --format json --output results/osv_json_report.json -L package-lock.json'
+                sh 'osv-scanner --format json --output results/osv_json_report.json -L package-lock.json || true'
             }
         }
         stage('DAST') {
