@@ -19,8 +19,7 @@ pipeline {
         }
         stage('OSV') {
             steps {
-                sh 'ls -la /root/abc/abcd-student'
-                sh 'pwd'
+                sh 'ls -la .'
                 sh 'osv-scanner --format json --output results/osv_json_report.json -L /root/abc/abcd-student/package-lock.json'
             }
         }
