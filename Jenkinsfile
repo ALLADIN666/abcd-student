@@ -17,6 +17,11 @@ pipeline {
                 sh 'mkdir -p results/'
             }
         }
+        stage('OSV'_ {
+            steps {
+                sh 'osvscanner --format json --output results/osvscan.json -r /root/abc/abcd-student/'
+            }
+        }
         stage('DAST') {
             steps{
                 sh 'docker run --name juice-shop -d --rm -p 3000:3000 bkimminich/juice-shop;sleep 5'
@@ -47,6 +52,7 @@ pipeline {
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             echo 'Sending to DefectDojo...'
             defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'argonmist@gmail.com')
+            #defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'argonmist@gmail.com')
         }
     }
 }
