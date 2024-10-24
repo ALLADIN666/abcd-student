@@ -8,7 +8,7 @@ pipeline {
             steps {
                 script {
                     cleanWs()
-                    git credentialsId: 'github-pat', url: 'https://github.com/ALLADIN666/abcd-student', branch: 'main'
+                    git credentialsId: 'github-pat', url: 'https://github.com/ALLADIN666/abcd-student/package', branch: 'main'
                 }
             }
         }
@@ -19,7 +19,7 @@ pipeline {
         }
         stage('OSV') {
             steps {
-                sh 'osvscanner --format json --output results/osvscan.json -r /root/abc/abcd-student/'
+                sh 'osvscanner --format json --output results/osv_json_report.json -L /root/abc/abcd-student/package-lock.json'
             }
         }
         stage('DAST') {
@@ -52,7 +52,7 @@ pipeline {
             archiveArtifacts artifacts: 'results/**/*', fingerprint: true, allowEmptyArchive: true
             echo 'Sending to DefectDojo...'
             defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'argonmist@gmail.com')
-            #defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: 'argonmist@gmail.com')
+            #defectDojoPublisher(artifact: 'results/osv_json_report.json', productName: 'Juice Shop', scanType: 'OSV Scan', engagementName: 'argonmist@gmail.com')
         }
     }
 }
