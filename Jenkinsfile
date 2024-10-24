@@ -17,7 +17,7 @@ pipeline {
                 sh 'mkdir -p results/'
             }
         }
-        stage('OSV'_ {
+        stage('OSV') {
             steps {
                 sh 'osvscanner --format json --output results/osvscan.json -r /root/abc/abcd-student/'
             }
