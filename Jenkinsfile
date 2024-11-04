@@ -24,7 +24,7 @@ pipeline {
         }
          stage('Secrets') {
             steps {
-                sh 'trufflehog git file://. --only-verified'
+                sh 'trufflehog git file://. --only-verified --json > results/trufflehog_json_report.json'
             }
         }
         stage('DAST') {
@@ -59,6 +59,7 @@ pipeline {
             withCredentials([string(credentialsId: 'email2dojo', variable: 'email2dojo')]) {
               defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: email2dojo)
               defectDojoPublisher(artifact: 'results/osv_json_report.json', productName: 'Juice Shop', scanType: 'OSV Scan', engagementName: email2dojo)
+              defectDojoPublisher(artifact: 'results/trufflehog_json_report.json', productName: 'Juice Shop', scanType: 'Trufflehog Scan', engagementName: email2dojo)
             }
         }
     }
