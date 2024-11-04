@@ -24,7 +24,7 @@ pipeline {
         }
          stage('Secrets') {
             steps {
-                sh 'trufflehog git file://. --only-verified --json > results/trufflehog_json_report.json'
+                sh 'trufflehog git file://. --branch main --force-skip-archives --json > results/trufflehog_json_report.json'
             }
         }
         stage('DAST') {
