@@ -22,6 +22,11 @@ pipeline {
                 sh 'osv-scanner --format json --output results/osv_json_report.json -L package-lock.json || true'
             }
         }
+         stage('Secrets') {
+            steps {
+                sh 'trufflehog git file://. --only-verified'
+            }
+        }
         stage('DAST') {
             steps{
                   sh 'docker run --name juice-shop -d --rm -p 3000:3000 bkimminich/juice-shop;sleep 5'
