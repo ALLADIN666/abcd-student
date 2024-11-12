@@ -27,6 +27,11 @@ pipeline {
                 sh 'trufflehog git file://. --branch main --force-skip-archives --json > results/trufflehog_json_report.json'
             }
         }
+        stage('SAST') {
+            steps {
+                sh ' semgrep scan --config auto --json -q  --no-autofix . > results/semgrep_json_report.json'
+            }
+        }
         stage('DAST') {
             steps{
                   sh 'docker run --name juice-shop -d --rm -p 3000:3000 bkimminich/juice-shop;sleep 5'
