@@ -65,7 +65,7 @@ pipeline {
               defectDojoPublisher(artifact: 'results/zap_xml_report.xml', productName: 'Juice Shop', scanType: 'ZAP Scan', engagementName: email2dojo)
               defectDojoPublisher(artifact: 'results/osv_json_report.json', productName: 'Juice Shop', scanType: 'OSV Scan', engagementName: email2dojo)
               defectDojoPublisher(artifact: 'results/trufflehog_json_report.json', productName: 'Juice Shop', scanType: 'Trufflehog Scan', engagementName: email2dojo)
-              defectDojoPublisher(artifact: 'results/semgrep_json_report.json', productName: 'Juice Shop', scanType: 'Semgrep Scan', engagementName: email2dojo)
+              defectDojoPublisher(artifact: 'results/semgrep_json_report.json', productName: 'Juice Shop', scanType: 'Semgrep JSON Report', engagementName: email2dojo)
             }
         }
     }
